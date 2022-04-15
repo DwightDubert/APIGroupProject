@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="POKEMANS">
+    <meta name="author" content="Dwight Dubert and Xander Dobson">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Grape+Nuts&family=Nunito&display=swap"
+        rel="stylesheet">
+    <!-- Google Fonts -->
+    <!-- Font Awesome -->
+
+    <!-- Font Awesome -->
+    <title>Pokussy?</title>
+
+</head>
+
+<body>
+    <content>
+
+        <!-- Starter screen, goes away after pokemon is chosen -->
+        <div id="chooseStarter">
+            <h1 id="starterText">Choose your starter!</h1>
+            <div id="starterImgs">
+                <img id="starter1" src="placeHolder.png">
+                <img id="starter2" src="placeHolder.png">
+                <img id="starter3" src="placeHolder.png">
+            </div>
+        </div>
+
+        <!-- Middle of the screen where the pokemon fight -->
+        <div id="fighting">
+            <div id="enemyHP">
+                <h1 id="enemyPokemonHP">HP:</h1>
+                <h1 id="enemyPokemonName">Name</h1>
+            </div>
+            <div id="enemyPokemon">
+                <img id="enemyPokemonImg" src="placeholder.png" alt="">
+            </div>
+            <div id="playerPokemon">
+                <img id="playerPokemonImg" src="placeHolder.png" alt="">
+            </div>
+            <div id="playerHP">
+                <h1 id="playerPokemonName">:Name</h1>
+                <h1 id="playerPokemonHP">:HP</h1>
+            </div>
+        </div>
+        <!-- Right of the screen where the pokemon -->
+        <div id="party">
+            <div id="partySlot1">
+                <img src="placeHolder.png" alt="1">
+                <h1 id="partySlot1HP">hp</h1>
+            </div>
+            <div id="partySlot2">
+                <img src="placeHolder.png" alt="2">
+                <h1 id="partySlot2HP">hp</h1>
+
+            </div>
+            <div id="partySlot3">
+                <img src="placeHolder.png" alt="3">
+                <h1 id="partySlot3HP">hp</h1>
+
+            </div>
+            <div id="partySlot4">
+                <img src="placeHolder.png" alt="4">
+                <h1 id="partySlot4HP">hp</h1>
+
+            </div>
+            <div id="partySlot5">
+                <img src="placeHolder.png" alt="5">
+                <h1 id="partySlot5HP">hp</h1>
+
+            </div>
+            <!-- <div id="partySlot6">
+                    <img src="placeHolder.png" alt="6">
+                    <h1 id="partySlot6HP">hp</h1>
+                </div> -->
+        </div>
+        <div id="userInputs">
+            <div>
+                <div id="bag">
+                    <img id="bagImg" onclick="openBag()" src="bagButton.png" alt="BagGoesHere">
+                    <button id="bagButton1" onclick="usePotion()">Potion</button>
+                    <button id="bagButton2" >Pokéball</button>
+                    <button id="bagButton3" onclick="useSuperPotion()">Super Potion</button>
+                    <button id="bagButton4" >Greatball</button>
+                </div>
+                <img id="closeBag" src="bagButtonOpen.png" alt="" onclick="closeBag()">
+            </div>
+            <div id="attacks">
+                <button onclick="doAttack('enemy', 'attack1')" id="attack1">Attack 1</button>
+                <button onclick="doAttack('enemy', 'attack2')" id="attack2">Attack 2</button>
+                <button onclick="doAttack('enemy', 'attack3')" id="attack3">Attack 3</button>
+                <button onclick="doAttack('enemy', 'attack4')" id="attack4">Attack 4</button>
+            </div>
+        </div>
+        <div id="fightLog">
+            <h1 id="logTitle"> Battle Log </h1>
+            <div id="log"></div>
+        </div>
+    </content>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
