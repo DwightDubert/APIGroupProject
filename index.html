@@ -17,7 +17,7 @@
     <!-- Font Awesome -->
 
     <!-- Font Awesome -->
-    <title>Pokussy?</title>
+    <title>Pokémon</title>
 
 </head>
 
@@ -38,7 +38,8 @@
         <div id="fighting">
             <div id="enemyHP">
                 <h1 id="enemyPokemonHP">HP:</h1>
-                <h1 id="enemyPokemonName">Name</h1>
+                <h1 id="enemyPokemonName">Name:</h1>
+                <h1 id="enemyPokemonLvl">Lvl:</h1>
             </div>
             <div id="enemyPokemon">
                 <img id="enemyPokemonImg" src="placeholder.png" alt="">
@@ -49,6 +50,7 @@
             <div id="playerHP">
                 <h1 id="playerPokemonName">:Name</h1>
                 <h1 id="playerPokemonHP">:HP</h1>
+                <h1 id="playerPokemonLvl">:Lvl</h1>
             </div>
         </div>
         <!-- Right of the screen where the pokemon -->
@@ -85,13 +87,13 @@
         <div id="userInputs">
             <div>
                 <div id="bag">
-                    <img id="bagImg" onclick="openBag()" src="bagButton.png" alt="BagGoesHere">
+                    <img id="bagImg" onclick="openBag()" src="bagButton.png" alt="placeHolder.png">
                     <button id="bagButton1" onclick="usePotion()">Potion</button>
-                    <button id="bagButton2" >Pokéball</button>
+                    <button id="bagButton2">Pokéball</button>
                     <button id="bagButton3" onclick="useSuperPotion()">Super Potion</button>
-                    <button id="bagButton4" >Greatball</button>
+                    <button id="bagButton4">Greatball</button>
                 </div>
-                <img id="closeBag" src="bagButtonOpen.png" alt="" onclick="closeBag()">
+                <img id="closeBag" src="bagButtonOpen.png" alt="placeHolder.png" onclick="closeBag()">
             </div>
             <div id="attacks">
                 <button onclick="doAttack('enemy', 'attack1')" id="attack1">Attack 1</button>
@@ -101,11 +103,15 @@
             </div>
         </div>
         <div id="fightLog">
-            <h1 id="logTitle"> Battle Log </h1>
             <div id="log"></div>
+            <div id="logGroup1">
+                <div onclick="showTypeAdvantage()" id="typeAdvatagesButton">View Type Advantages</div>
+                <img id="typeAdvantagesImg" src="TypesAndWhatNot.png" alt="placeHolder.png">
+                <h1 id="logTitle"> Battle Log </h1>
+            </div>
         </div>
     </content>
-
+    
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="script.js"></script>
