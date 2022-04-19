@@ -56,26 +56,26 @@
         <!-- Right of the screen where the pokemon -->
         <div id="party">
             <div id="partySlot1">
-                <img src="placeHolder.png" alt="1">
+                <img id="partySlot1Img"src="placeHolder.png" alt="1">
                 <h1 id="partySlot1HP">hp</h1>
             </div>
             <div id="partySlot2">
-                <img src="placeHolder.png" alt="2">
+                <img id="partySlot2Img" src="placeHolder.png" alt="2">
                 <h1 id="partySlot2HP">hp</h1>
 
             </div>
             <div id="partySlot3">
-                <img src="placeHolder.png" alt="3">
+                <img id="partySlot3Img" src="placeHolder.png" alt="3">
                 <h1 id="partySlot3HP">hp</h1>
 
             </div>
             <div id="partySlot4">
-                <img src="placeHolder.png" alt="4">
+                <img id="partySlot4Img" src="placeHolder.png" alt="4">
                 <h1 id="partySlot4HP">hp</h1>
 
             </div>
             <div id="partySlot5">
-                <img src="placeHolder.png" alt="5">
+                <img id="partySlot5Img" src="placeHolder.png" alt="5">
                 <h1 id="partySlot5HP">hp</h1>
 
             </div>
@@ -88,10 +88,10 @@
             <div>
                 <div id="bag">
                     <img id="bagImg" onclick="openBag()" src="bagButton.png" alt="placeHolder.png">
-                    <button id="bagButton1" onclick="usePotion()">Potion</button>
-                    <button id="bagButton2">Pokéball</button>
-                    <button id="bagButton3" onclick="useSuperPotion()">Super Potion</button>
-                    <button id="bagButton4">Greatball</button>
+                    <button id="bagButton1" onclick="usePotion()">Potion: 10</button>
+                    <button id="bagButton2" onclick="tryPokeball()">Pokéball: <span>∞<span></button>
+                    <button id="bagButton3" onclick="useSuperPotion()">Super Potion: 5</button>
+                    <button id="bagButton4" onclick="tryGreatball()">Greatball: 5</button>
                 </div>
                 <img id="closeBag" src="bagButtonOpen.png" alt="placeHolder.png" onclick="closeBag()">
             </div>
@@ -105,7 +105,7 @@
         <div id="fightLog">
             <div id="log"></div>
             <div id="logGroup1">
-                <div onclick="showTypeAdvantage()" id="typeAdvatagesButton">View Type Advantages</div>
+                <div onclick="showTypeAdvantage()" id="typeAdvatagesButton"><h1 id="buttonText">Type Advantages</h1></div>
                 <img id="typeAdvantagesImg" src="TypesAndWhatNot.png" alt="placeHolder.png">
                 <h1 id="logTitle"> Battle Log </h1>
             </div>

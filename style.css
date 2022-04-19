@@ -118,6 +118,13 @@ body {
     visibility: hidden
 }
 
+span {
+    margin: 0;
+    padding: 0;
+    font-size: 30px;
+    line-height: 0;
+}
+
 #closeBag {
     visibility: hidden;
 }
@@ -205,13 +212,14 @@ body {
 }
 
 #logTitle {
+    font-family: 'Bebas Neue', cursive; 
     font-size: 4vw;
     padding-top: 5px;
     text-align: center;
 }
 
 #log {
-    font-size: 30px;
+    font-size: 20px;
     overflow-y: scroll;
     width: 80%;
     height: 100%;
@@ -229,12 +237,20 @@ body {
 
 #typeAdvatagesButton {
     background-color: rgb(62, 17, 165);
-    width: 10vw;
+    width: auto;
     height: 30%;
     z-index: 1;
     border-radius: 20px;
     text-align: center;
-    font-size: 2vw ;
+    display: flex;
+    align-items: center;
+}
+
+#buttonText {
+    font-family: 'Nunito', sans-serif; 
+    width: 100%;
+    font-size: 150%;
+    padding: 3px;
 }
 
 #typeAdvantagesButton:target {
@@ -245,10 +261,10 @@ body {
     visibility: hidden;
     position: absolute;
     left: 50%;
-    bottom: 50%;
-    width: 70%;
+    width: 80%;
     transform: translateX(-50%) translateY(-50%);
     z-index: 1;
+    border-radius: 50px;
 }
 
 #logGroup1 {
@@ -257,5 +273,25 @@ body {
     justify-content: space-evenly;
     align-items: center;
     height: 100%;
+}
 
+#partySlot1,
+#partySlot2,
+#partySlot3,
+#partySlot4,
+#partySlot5 {
+    width: 200%;
+}
+
+@media (max-width: 800px) {
+    #party {
+        width: 20vw;
+    } 
+    #userInputs {
+        width: 25vw;
+    }
+    #fighting {
+        width: 55vw;
+        left: 25vw
+    }
 }
