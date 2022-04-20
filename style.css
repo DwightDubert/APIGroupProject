@@ -16,6 +16,8 @@ font-family: 'Nunito', sans-serif; Bold, header kind of text
 
 body {
     overflow-y: none;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 #chooseStarter {
@@ -275,13 +277,24 @@ span {
     height: 100%;
 }
 
+#partySlot1Img,
+#partySlot2Img,
+#partySlot3Img,
+#partySlot4Img,
+#partySlot5Img { 
+   min-width:50%;
+   min-height:50%;
+
+}
 #partySlot1,
 #partySlot2,
 #partySlot3,
 #partySlot4,
-#partySlot5 {
-    width: 200%;
+#partySlot5 { 
+   visibility: hidden;
 }
+
+
 
 @media (max-width: 800px) {
     #party {

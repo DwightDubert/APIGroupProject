@@ -12,27 +12,27 @@ window.isPokemonEvolved = false;
 // Stores the player's pokemon when not in use
 window.playerParty = [
     slot1 = {
-        hp: undefined, lvl: undefined, isShiny: undefined,
+        hp: undefined, maxHp: undefined, lvl: undefined, isShiny: undefined,
         isEvolved: undefined, exp: undefined, id: undefined,
         moves: { move1: undefined, move2: undefined, move3: undefined, move4: undefined }
     },
     slot2 = {
-        hp: undefined, lvl: undefined, isShiny: undefined,
+        hp: undefined, maxHp: undefined, lvl: undefined, isShiny: undefined,
         isEvolved: undefined, exp: undefined, id: undefined,
         moves: { move1: undefined, move2: undefined, move3: undefined, move4: undefined }
     },
     slot3 = {
-        hp: undefined, lvl: undefined, isShiny: undefined,
+        hp: undefined, maxHp: undefined, lvl: undefined, isShiny: undefined,
         isEvolved: undefined, exp: undefined, id: undefined,
         moves: { move1: undefined, move2: undefined, move3: undefined, move4: undefined }
     },
     slot4 = {
-        hp: undefined, lvl: undefined, isShiny: undefined,
+        hp: undefined, maxHp: undefined, lvl: undefined, isShiny: undefined,
         isEvolved: undefined, exp: undefined, id: undefined,
         moves: { move1: undefined, move2: undefined, move3: undefined, move4: undefined }
     },
     slot5 = {
-        hp: undefined, lvl: undefined, isShiny: undefined,
+        hp: undefined, maxHp: undefined, lvl: undefined, isShiny: undefined,
         isEvolved: undefined, exp: undefined, id: undefined,
         moves: { move1: undefined, move2: undefined, move3: undefined, move4: undefined }
     }
@@ -65,6 +65,7 @@ async function pickStarters() {
 
 // Sets the starter pokemon when the pokemon is clicked
 async function setStarter(chosenStarter) {
+    document.getElementById("chooseStarter").style.visibility = "hidden";
     if (chosenStarter == 1) {
         let img = await getPokemonBackImg(2)
         document.getElementById("playerPokemonImg").setAttribute("src", img)
@@ -110,7 +111,6 @@ async function setStarter(chosenStarter) {
                 document.getElementById("playerPokemonLvl").innerText = window.currentPokemonLvl + ":Lvl"
             }
     window.canAttack = true;
-    document.getElementById("chooseStarter").style.visibility = "hidden";
     await makeEnemyPokemon()
 }
 
@@ -170,18 +170,10 @@ async function getPokemonAttacks(id) {
     document.getElementById("attack2").innerText = capitalizeFirstLetter(attack2.replace("-", " "))
     document.getElementById("attack3").innerText = capitalizeFirstLetter(attack3.replace("-", " "))
     document.getElementById("attack4").innerText = capitalizeFirstLetter(attack4.replace("-", " "))
-    attack1Url = pokemonData.data.moves[attackArray[0]].move.url
-    attack2Url = pokemonData.data.moves[attackArray[1]].move.url
-    attack3Url = pokemonData.data.moves[attackArray[2]].move.url
-    attack4Url = pokemonData.data.moves[attackArray[3]].move.url
-    move1Data = await axios.get(attack1Url)
-    move2Data = await axios.get(attack2Url)
-    move3Data = await axios.get(attack3Url)
-    move4Data = await axios.get(attack4Url)
-    setMoveColor(move1Data, "attack1")
-    setMoveColor(move2Data, "attack2")
-    setMoveColor(move3Data, "attack3")
-    setMoveColor(move4Data, "attack4")
+    setMoveColor("attack1", await getMoveType(window.attack1))
+    setMoveColor("attack2", await getMoveType(window.attack2))
+    setMoveColor("attack3", await getMoveType(window.attack3))
+    setMoveColor("attack4", await getMoveType(window.attack4))
 
     return (pokemonData.data.stats[0].base_stat);
 }
@@ -197,12 +189,18 @@ async function getNewPokemonMoves(id) {
             attackArray.push(attack)
         }
     }
-    attack1 = pokemonData.data.moves[attackArray[0]].move.name
-    attack2 = pokemonData.data.moves[attackArray[1]].move.name
-    attack3 = pokemonData.data.moves[attackArray[2]].move.name
-    attack4 = pokemonData.data.moves[attackArray[3]].move.name
-    newArray = [attack1, attack2, attack3, attack4]
+    attack1temp = pokemonData.data.moves[attackArray[0]].move.name
+    attack2temp = pokemonData.data.moves[attackArray[1]].move.name
+    attack3temp = pokemonData.data.moves[attackArray[2]].move.name
+    attack4temp = pokemonData.data.moves[attackArray[3]].move.name
+    newArray = [attack1temp, attack2temp, attack3temp, attack4temp]
     return newArray
+}
+async function setMoveColorOnSwap(moveArray) {
+    setMoveColor("attack1", await getMoveType(moveArray[0]))
+    setMoveColor("attack2", await getMoveType(moveArray[1]))
+    setMoveColor("attack3", await getMoveType(moveArray[2]))
+    setMoveColor("attack4", await getMoveType(moveArray[3]))
 }
 async function getEnemyMove(id) {
     const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
@@ -212,59 +210,59 @@ async function getEnemyMove(id) {
     return pokemonData.data.moves[attack].move.name;
 }
 // Changed the color of the background of the attack button
-function setMoveColor(url, element) {
-    if (url.data.type.name == "normal") {
+function setMoveColor(element, name) {
+    if (name == "normal") {
         document.getElementById(element).style.backgroundColor = "#c0c0c0"
     }
-    else if (url.data.type.name == "fire") {
+    else if (name == "fire") {
         document.getElementById(element).style.backgroundColor = "#FA7053"
     }
-    else if (url.data.type.name == "water") {
+    else if (name == "water") {
         document.getElementById(element).style.backgroundColor = "#798CFF"
     }
-    else if (url.data.type.name == "grass") {
+    else if (name == "grass") {
         document.getElementById(element).style.backgroundColor = "#71FF7F"
     }
-    else if (url.data.type.name == "flying") {
+    else if (name == "flying") {
         document.getElementById(element).style.backgroundColor = "#F8F8F8"
     }
-    else if (url.data.type.name == "fighting") {
+    else if (name == "fighting") {
         document.getElementById(element).style.backgroundColor = "#AA0019"
     }
-    else if (url.data.type.name == "poison") {
+    else if (name == "poison") {
         document.getElementById(element).style.backgroundColor = "#914AFF"
     }
-    else if (url.data.type.name == "electric") {
+    else if (name == "electric") {
         document.getElementById(element).style.backgroundColor = "#FFF950"
     }
-    else if (url.data.type.name == "ground") {
+    else if (name == "ground") {
         document.getElementById(element).style.backgroundColor = "#6C3A00"
     }
-    else if (url.data.type.name == "rock") {
+    else if (name == "rock") {
         document.getElementById(element).style.backgroundColor = "#B06000"
     }
-    else if (url.data.type.name == "psychic") {
+    else if (name == "psychic") {
         document.getElementById(element).style.backgroundColor = "#DE40FF"
     }
-    else if (url.data.type.name == "ice") {
+    else if (name == "ice") {
         document.getElementById(element).style.backgroundColor = "#A1FFFE"
     }
-    else if (url.data.type.name == "bug") {
+    else if (name == "bug") {
         document.getElementById(element).style.backgroundColor = "#A1D053"
     }
-    else if (url.data.type.name == "ghost") {
+    else if (name == "ghost") {
         document.getElementById(element).style.backgroundColor = "#8073A6"
     }
-    else if (url.data.type.name == "steel") {
+    else if (name == "steel") {
         document.getElementById(element).style.backgroundColor = "#A6A6A6"
     }
-    else if (url.data.type.name == "dragon") {
+    else if (name == "dragon") {
         document.getElementById(element).style.backgroundColor = "#7414FF"
     }
-    else if (url.data.type.name == "dark") {
+    else if (name == "dark") {
         document.getElementById(element).style.backgroundColor = "#3F3E5D"
     }
-    else if (url.data.type.name == "fairy") {
+    else if (name == "fairy") {
         document.getElementById(element).style.backgroundColor = "#F59CF7"
     }
 }
@@ -313,7 +311,7 @@ async function makeEnemyPokemon() {
     window.enemyID = id
     const url = 'https://pokeapi.co/api/v2/pokemon/' + id;
     const pokemonData = await axios.get(url);
-    let rng = (Math.floor(Math.random() * 50))
+    let rng = (Math.floor(Math.random() * 50) + 1)
     if (rng == 42) {
         window.isPokemonShiny = true;
         document.getElementById("enemyPokemonImg").setAttribute("src", pokemonData.data.sprites.front_shiny)
@@ -337,174 +335,180 @@ async function makeEnemyPokemon() {
 }
 
 async function doAttack(target, attack) {
-    if (attack == "attack1") {
-        currentAttack = window.attack1
-    } else if (attack == "attack2") {
-        currentAttack = window.attack2
-    } else if (attack == "attack3") {
-        currentAttack = window.attack3
-    } else if (attack == "attack4") {
-        currentAttack = window.attack4
-    }
-    let chance = Math.floor((Math.random() * 10) + 1)
-    if (chance == 1) {
-        dmg = 0
-    } else if (chance == 10) {
-        dmg = Math.floor((Math.random() * 15) + 15)
-        if (window.isPokemonEvolved == true) {
-            dmg += Math.floor((Math.random() * 5) + 10)
+        if (attack == "attack1") {
+            currentAttack = window.attack1
+        } else if (attack == "attack2") {
+            currentAttack = window.attack2
+        } else if (attack == "attack3") {
+            currentAttack = window.attack3
+        } else if (attack == "attack4") {
+            currentAttack = window.attack4
         }
-    } else {
-        dmg = Math.floor((Math.random() * 5) + 5)
-        if (window.isPokemonEvolved == true) {
-            dmg += Math.floor((Math.random() * 5) + 5)
-        }
-    }
-    if (target == "enemy" && window.canAttack == true) {
-        jiggle("player")
-
-        // Call that HUGE if statement 
-        bonus = await checkEffective(currentAttack, "enemy", 0)
-        bonus += await checkEffective(currentAttack, "enemy", 1)
-
-        if ((dmg + bonus) < window.enemyHP) {
-            // Enemy doesnt faint and takes dmg
-            if (dmg == 0) {
-                if (dmg + bonus < 0) {
-                    bonus = dmg - (dmg * 2)
-                }
-                document.getElementById("log").innerHTML += await getName(window.playerID) + " missed! <br>"
-                scrollToBottom()
-            } else if (dmg >= 15) {
-                // Failsafe for bonus being less than dmg is positive
-                if (dmg + bonus < 0) {
-                    bonus = dmg - (dmg * 2)
-                }
-                window.enemyHP -= dmg + bonus
-                debugDmg = dmg + bonus
-                console.log("Damage Delt: " + debugDmg + "(" + dmg + "+" + bonus + ")");
-                document.getElementById("log").innerHTML += await getName(window.enemyID) + " has been hit by " + currentAttack + "! (CRITICAL!!!) <br>"
-                if (bonus > 0) {
-                    document.getElementById("log").innerHTML += "It was super effective! <br>"
-                } else if (bonus < 0) {
-                    document.getElementById("log").innerHTML += "It wasn't very effective.. <br>"
-                }
-                scrollToBottom()
-                window.canAttack = false;
-            } else {
-                // Failsafe for bonus being less than dmg is positive
-                if (dmg + bonus < 0) {
-                    bonus = dmg - (dmg * 2)
-                }
-                window.enemyHP -= dmg + bonus
-                debugDmg = dmg + bonus
-                console.log("Damage Delt: " + debugDmg + "(" + dmg + "+" + bonus + ")");
-                document.getElementById("log").innerHTML += await getName(window.enemyID) + " has been hit by " + currentAttack + "! <br>"
-                if (bonus > 0) {
-                    document.getElementById("log").innerHTML += "It was super effective! <br>"
-                } else if (bonus < 0) {
-                    document.getElementById("log").innerHTML += "It wasn't very effective.. <br> "
-                }
-                scrollToBottom()
-                window.canAttack = false;
+        let chance = Math.floor((Math.random() * 10) + 1)
+        if (chance == 1) {
+            dmg = 0
+        } else if (chance == 10) {
+            dmg = Math.floor((Math.random() * 15) + 15)
+            if (window.isPokemonEvolved == true) {
+                dmg += Math.floor((Math.random() * 5) + 10)
             }
-        } else if (dmg > 0) {
-            // Enemy faints
-            window.canAttack = false
-            document.getElementById("log").innerHTML += await getName(window.enemyID) + " has been hit by " + currentAttack + " and fainted! <br>"
-            scrollToBottom()
-            document.getElementById("enemyPokemonHP").innerText = "HP: Fainted!"
-            document.getElementById("enemyPokemonImg").style.visibility = 'hidden'
-            await gainEXP()
-            if (true) {
-                dropRng = Math.floor(Math.random() * 10) + 1
-                console.log(dropRng);
-                if (dropRng == 1) {
-                    window.greatBalls++
-                    document.getElementById("log").innerHTML += "You Found a Greatball! <br>"
-                    scrollToBottom()
-                    document.getElementById("bagButton4").innerHTML = "Greatballs: " + window.greatBalls
-                } else if (dropRng > 1 && dropRng < 5) {
-                    window.superPotions++
-                    document.getElementById("bagButton3").innerHTML += "Super Potions: " + window.superPotions
-                    scrollToBottom()
-                } else {
-                    window.potions++
-                    document.getElementById("log").innerHTML += "You Found a Potion! <br>"
-                    document.getElementById("bagButton1").innerHTML += "Potion: " + window.potions
-                    scrollToBottom()
-                }
-            }
-            setTimeout(makeEnemyPokemon, 2000);
-        }
-
-        if (document.getElementById("enemyPokemonImg").style.visibility == "visible") {
-            document.getElementById("enemyPokemonHP").innerText = "HP: " + window.enemyHP
-            setTimeout(doAttack, 1000, "player");
         } else {
-            setTimeout(() => {
-                window.canAttack = true
-            }, 3000);
+            dmg = Math.floor((Math.random() * 5) + 5)
+            if (window.isPokemonEvolved == true) {
+                dmg += Math.floor((Math.random() * 5) + 5)
+            }
+        }
+        if (target == "enemy" && window.canAttack == true) {
+            jiggle("player")
+
+            // Call that HUGE if statement 
+            bonus = await checkEffective(currentAttack, "enemy", 0)
+            bonus += await checkEffective(currentAttack, "enemy", 1)
+
+            if ((dmg + bonus) < window.enemyHP) {
+                // Enemy doesnt faint and takes dmg
+                if (dmg == 0) {
+                    if (dmg + bonus < 0) {
+                        bonus = dmg - (dmg * 2)
+                    }
+                    document.getElementById("log").innerHTML += await getName(window.playerID) + " missed! <br>"
+                    scrollToBottom()
+                } else if (dmg >= 15) {
+                    // Failsafe for bonus being less than dmg is positive
+                    if (dmg + bonus < 0) {
+                        bonus = dmg - (dmg * 2)
+                    }
+                    window.enemyHP -= dmg + bonus
+                    debugDmg = dmg + bonus
+                    console.log("Damage Delt: " + debugDmg + "(" + dmg + "+" + bonus + ")");
+                    document.getElementById("log").innerHTML += await getName(window.enemyID) + " has been hit by " + currentAttack + "! (CRITICAL!!!) <br>"
+                    if (bonus > 0) {
+                        document.getElementById("log").innerHTML += "It was super effective! <br>"
+                    } else if (bonus < 0) {
+                        document.getElementById("log").innerHTML += "It wasn't very effective.. <br>"
+                    }
+                    scrollToBottom()
+                    window.canAttack = false;
+                } else {
+                    // Failsafe for bonus being less than dmg is positive
+                    if (dmg + bonus < 0) {
+                        bonus = dmg - (dmg * 2)
+                    }
+                    window.enemyHP -= dmg + bonus
+                    debugDmg = dmg + bonus
+                    console.log("Damage Delt: " + debugDmg + "(" + dmg + "+" + bonus + ")");
+                    document.getElementById("log").innerHTML += await getName(window.enemyID) + " has been hit by " + currentAttack + "! <br>"
+                    if (bonus > 0) {
+                        document.getElementById("log").innerHTML += "It was super effective! <br>"
+                    } else if (bonus < 0) {
+                        document.getElementById("log").innerHTML += "It wasn't very effective.. <br> "
+                    }
+                    scrollToBottom()
+                    window.canAttack = false;
+                }
+            } else if (dmg > 0) {
+                // Enemy faints
+                window.canAttack = false
+                document.getElementById("log").innerHTML += await getName(window.enemyID) + " has been hit by " + currentAttack + " and fainted! <br>"
+                scrollToBottom()
+                document.getElementById("enemyPokemonHP").innerText = "HP: Fainted!"
+                document.getElementById("enemyPokemonImg").style.visibility = 'hidden'
+                await gainEXP()
+                if (true) {
+                    dropRng = Math.floor(Math.random() * 10) + 1
+                    console.log(dropRng);
+                    if (dropRng == 1) {
+                        window.greatBalls++
+                        document.getElementById("log").innerHTML += "* You Found a Greatball! <br>"
+                        scrollToBottom()
+                        document.getElementById("bagButton4").innerHTML = "Greatballs: " + window.greatBalls
+                    } else if (dropRng > 1 && dropRng < 5) {
+                        window.superPotions++
+                        document.getElementById("log").innerHTML += "* You Found a Super Potion! <br>"
+                        document.getElementById("bagButton3").innerHTML = "Super Potions: " + window.superPotions
+                        scrollToBottom()
+                    } else {
+                        window.potions++
+                        document.getElementById("log").innerHTML += "* You Found a Potion! <br>"
+                        document.getElementById("bagButton1").innerHTML = "Potion: " + window.potions
+                        scrollToBottom()
+                    }
+                }
+                setTimeout(makeEnemyPokemon, 2000);
+            }
+
+            if (document.getElementById("enemyPokemonImg").style.visibility == "visible") {
+                document.getElementById("enemyPokemonHP").innerText = "HP: " + window.enemyHP
+                setTimeout(doAttack, 1000, "player");
+            } else {
+                setTimeout(() => {
+                    window.canAttack = true
+                }, 3000);
+            }
         }
 
         // If enemy attacks player
-    } else if (target == "player") {
-        jiggle("enemy")
-        currentAttack = await getEnemyMove(window.enemyID)
+        else if (target == "player") {
+            jiggle("enemy")
+            currentAttack = await getEnemyMove(window.enemyID)
 
-        bonus = await checkEffective(currentAttack, "player", 0)
-        bonus += await checkEffective(currentAttack, "player", 1)
+            bonus = await checkEffective(currentAttack, "player", 0)
+            bonus += await checkEffective(currentAttack, "player", 1)
 
-        if ((dmg + bonus) < window.playerHP) {
-            window.playerHP -= dmg + bonus
-            document.getElementById("playerPokemonHP").innerText = window.playerHP + " :HP"
-            window.canAttack = true
+            if ((dmg + bonus) < window.playerHP) {
+                window.playerHP -= dmg + bonus
+                document.getElementById("playerPokemonHP").innerText = window.playerHP + " :HP"
+                window.canAttack = true
 
-            if (dmg == 0) {
-                if (dmg + bonus < 0) {
-                    bonus = dmg - (dmg * 2)
+                if (dmg == 0) {
+                    if (dmg + bonus < 0) {
+                        bonus = dmg - (dmg * 2)
+                    }
+                    document.getElementById("log").innerHTML += await getName(window.enemyID) + " missed! <br>"
+                    scrollToBottom()
+                } else if (dmg >= 15) {
+                    if (dmg + bonus < 0) {
+                        bonus = dmg - (dmg * 2)
+                    }
+                    debugDmg = dmg + bonus
+                    console.log("Damage Dealt to player: " + debugDmg + "(" + dmg + "+" + bonus + ")");
+                    document.getElementById("log").innerHTML += await getName(window.playerID) + " has been hit by " + currentAttack + "! (CRITICAL!!!) <br>"
+                    if (bonus > 0) {
+                        document.getElementById("log").innerHTML += "It was super effective! <br>"
+                    } else if (bonus < 0) {
+                        document.getElementById("log").innerHTML += "It wasn't very effective.. <br> "
+                    }
+                    scrollToBottom()
+                } else {
+                    if (dmg + bonus < 0) {
+                        bonus = dmg - (dmg * 2)
+                    }
+                    debugDmg = dmg + bonus
+                    console.log("Damage Dealt to player: " + debugDmg + "(" + dmg + "+" + bonus + ")");
+                    document.getElementById("log").innerHTML += await getName(window.playerID) + " has been hit by " + currentAttack + "! <br>"
+                    if (bonus > 0) {
+                        document.getElementById("log").innerHTML += "It was super effective! <br>"
+                    } else if (bonus < 0) {
+                        document.getElementById("log").innerHTML += "It wasn't very effective.. <br> "
+                    }
+                    scrollToBottom()
                 }
-                document.getElementById("log").innerHTML += await getName(window.enemyID) + " missed! <br>"
-                scrollToBottom()
-            } else if (dmg >= 15) {
-                if (dmg + bonus < 0) {
-                    bonus = dmg - (dmg * 2)
-                }
-                debugDmg = dmg + bonus
-                console.log("Damage Dealt to player: " + debugDmg + "(" + dmg + "+" + bonus + ")");
-                document.getElementById("log").innerHTML += await getName(window.playerID) + " has been hit by " + currentAttack + "! (CRITICAL!!!) <br>"
-                if (bonus > 0) {
-                    document.getElementById("log").innerHTML += "It was super effective! <br>"
-                } else if (bonus < 0) {
-                    document.getElementById("log").innerHTML += "It wasn't very effective.. <br> "
-                }
-                scrollToBottom()
             } else {
                 if (dmg + bonus < 0) {
                     bonus = dmg - (dmg * 2)
                 }
                 debugDmg = dmg + bonus
                 console.log("Damage Dealt to player: " + debugDmg + "(" + dmg + "+" + bonus + ")");
-                document.getElementById("log").innerHTML += await getName(window.playerID) + " has been hit by " + currentAttack + "! <br>"
-                if (bonus > 0) {
-                    document.getElementById("log").innerHTML += "It was super effective! <br>"
-                } else if (bonus < 0) {
-                    document.getElementById("log").innerHTML += "It wasn't very effective.. <br> "
-                }
+                document.getElementById("log").innerHTML += await getName(window.playerID) + " has been hit by " + currentAttack + " and fainted! <br>"
                 scrollToBottom()
+                document.getElementById("playerPokemonHP").innerText = "Fainted! :HP"
+                window.playerHP = 0
+                document.getElementById("playerPokemonImg").style.visibility = "hidden"
+                if (window.playerParty[0].hp != 0 || window.playerParty[1].hp != 0 || window.playerParty[2].hp != 0 || window.playerParty[3].hp != 0 || window.playerParty[4].hp != 0 || window.playerParty[5].hp != 0 || window.playerParty[0].hp != undefined || window.playerParty[1].hp != undefined || window.playerParty[2].hp != undefined || window.playerParty[3].hp != undefined || window.playerParty[4].hp != undefined || window.playerParty[5].hp != undefined) { 
+                    window.canChange = true
+                }
             }
-        } else {
-            if (dmg + bonus < 0) {
-                bonus = dmg - (dmg * 2)
-            }
-            debugDmg = dmg + bonus
-            console.log("Damage Dealt to player: " + debugDmg + "(" + dmg + "+" + bonus + ")");
-            document.getElementById("log").innerHTML += await getName(window.playerID) + " has been hit by " + currentAttack + " and fainted! <br>"
-            scrollToBottom()
-            document.getElementById("playerPokemonHP").innerText = "Fainted! :HP"
-            document.getElementById("playerPokemonImg").style.visibility = "hidden"
         }
-    }
 }
 
 async function checkEffective(currentAttack, target, index) {
@@ -974,7 +978,7 @@ function closeBag() {
 
 async function gainEXP() {
     exp = await getPokemonHP(window.enemyID)
-    exp = exp * 2000
+    exp = exp * 77
     console.log("EXP: " + exp);
     window.currentPokemonEXP = window.currentPokemonEXP + exp
     if (window.currentPokemonEXP >= 5000) {
@@ -1012,6 +1016,8 @@ async function tryEvolve() {
             window.playerID = id
             window.playerMaxHp = await getPokemonHP(id)
             window.playerHP = window.playerMaxHp
+            getPokemonAttacks(window.playerID)
+            document.getElementById("playerPokemonHP").innerText = window.playerHP + ":HP"
             window.isPokemonEvolved = true
         }
     }
@@ -1020,9 +1026,15 @@ async function tryEvolve() {
 async function tryPokeball() {
     if (window.canAttack == true) {
         window.canAttack = false
+        document.getElementById("enemyPokemonImg").setAttribute("src", "pokeball.png")
         document.getElementById("log").innerHTML += "Trying to catch Pokemon..."
         scrollToBottom()
-        setTimeout(() => {
+
+        setTimeout(jiggle, 1000, 'enemy')
+        setTimeout(jiggle, 2500, 'enemy')
+        setTimeout(jiggle, 5000, 'enemy')
+
+        setTimeout(async () => {
             if (window.enemyHP <= 50 && window.enemyID != 132) {
                 chance = 70 - window.enemyHP
             } else {
@@ -1033,21 +1045,30 @@ async function tryPokeball() {
             if (rng <= chance) {
                 catchPokemon()
             } else {
-                document.getElementById("log").innerHTML += "The Pokemon broke free! <br>"
+                document.getElementById("log").innerHTML += "The Pokemon broke free! <br>";
                 scrollToBottom()
+                temp = await getPokemonFrontImg(window.enemyID, window.isPokemonShiny)
+                document.getElementById("enemyPokemonImg").setAttribute("src", temp);
+
                 setTimeout(doAttack, 1000, "player")
             }
-        }, 5000)
+        }, 7000)
     }
 }
 async function tryGreatball() {
     if (window.canAttack == true && window.greatBalls > 0) {
         window.canAttack = false;
         window.greatBalls--
+        document.getElementById("enemyPokemonImg").setAttribute("src", "greatball.png")
         document.getElementById("bagButton4").innerHTML = "Greatballs: " + window.greatBalls
         document.getElementById("log").innerHTML += "Trying to catch Pokemon... "
         scrollToBottom()
-        setTimeout(() => {
+
+        setTimeout(jiggle, 1000, 'enemy')
+        setTimeout(jiggle, 2500, 'enemy')
+        setTimeout(jiggle, 5000, 'enemy')
+
+        setTimeout(async () => {
             if (window.enemyHP <= 999 && window.enemyID != 132) {
                 chance = 999999 - window.enemyHP
             } else {
@@ -1059,46 +1080,64 @@ async function tryGreatball() {
                 catchPokemon()
             } else {
                 document.getElementById("log").innerHTML += "The Pokemon broke free! <br>"
+                temp = await getPokemonFrontImg(window.enemyID, window.isPokemonShiny)
+                document.getElementById("enemyPokemonImg").setAttribute("src", temp)
                 scrollToBottom()
                 setTimeout(doAttack, 1000, "player")
             }
-        }, 5000)
+        }, 7000)
     }
 }
 
 async function catchPokemon() {
+    document.getElementById("enemyPokemonImg").style.visibility = "hidden"
     if (window.playerParty[0].hp == undefined) {
         syncToParty(0)
         document.getElementById("partySlot1Img").setAttribute("src", await getPokemonFrontImg(window.enemyID, window.isPokemonShiny))
         console.log(await getPokemonFrontImg(window.enemyID, window.isPokemonShiny));
+        document.getElementById("partySlot1HP").innerText = window.playerParty[0].hp + "/" + window.playerParty[0].hp
         document.getElementById("log").innerHTML += "You caught it! <br>" + await getName(window.enemyID) + " has been saved to slot 1 <br>"
+        document.getElementById("partySlot1").style.visibility = "visible"
+
     } else if (window.playerParty[1].hp == undefined) {
         syncToParty(1)
         document.getElementById("partySlot2Img").setAttribute("src", await getPokemonFrontImg(window.enemyID, window.isPokemonShiny))
+        document.getElementById("partySlot2HP").innerText = window.playerParty[1].hp + "/" + window.playerParty[1].hp
         document.getElementById("log").innerHTML += "You caught it! <br>" + await getName(window.enemyID) + " has been saved to slot 2 <br>"
+        document.getElementById("partySlot2").style.visibility = "visible"
+
     } else if (window.playerParty[2].hp == undefined) {
         syncToParty(2)
         document.getElementById("partySlot3Img").setAttribute("src", await getPokemonFrontImg(window.enemyID, window.isPokemonShiny))
+        document.getElementById("partySlot3HP").innerText = window.playerParty[2].hp + "/" + window.playerParty[2].hp
         document.getElementById("log").innerHTML += "You caught it! <br>" + await getName(window.enemyID) + " has been saved to slot 3 <br>"
+        document.getElementById("partySlot3").style.visibility = "visible"
     } else if (window.playerParty[3].hp == undefined) {
         syncToParty(3)
         document.getElementById("partySlot4Img").setAttribute("src", await getPokemonFrontImg(window.enemyID, window.isPokemonShiny))
+        document.getElementById("partySlot4HP").innerText = window.playerParty[3].hp + "/" + window.playerParty[3].hp
         document.getElementById("log").innerHTML += "You caught it! <br>" + await getName(window.enemyID) + " has been saved to slot 4 <br>"
+        document.getElementById("partySlot4").style.visibility = "visible"
+
     } else if (window.playerParty[4].hp == undefined) {
         syncToParty(4)
         document.getElementById("partySlot5Img").setAttribute("src", await getPokemonFrontImg(window.enemyID, window.isPokemonShiny))
+        document.getElementById("partySlot5HP").innerText = window.playerParty[4].hp + "/" + window.playerParty[4].hp
         document.getElementById("log").innerHTML += "You caught it! <br>" + await getName(window.enemyID) + " has been saved to slot 5 <br>"
+        document.getElementById("partySlot5").style.visibility = "visible"
     } else {
         document.getElementById("log").innerHTML += "You caught it! <br> Sadly, you dont gave room for " + await getName(window.enemyID) + " and they have been released into the wild. <br>"
     }
     gainEXP()
 
-    setTimeout(makeEnemyPokemon, 2000)
-    setTimeout(doAttack, 3000, "player")
+    window.canAttack = false
+    setTimeout(makeEnemyPokemon, 1000)
+    setTimeout(() => { window.canAttack = true; }, 1100)
 }
 async function syncToParty(slotNum) {
     attacks = []
     window.playerParty[slotNum].hp = await getPokemonHP(window.enemyID)
+    window.playerParty[slotNum].maxHp = await getPokemonHP(window.enemyID)
     window.playerParty[slotNum].lvl = Math.floor(await getPokemonHP(window.enemyID) / 10)
     window.playerParty[slotNum].isShiny = window.isPokemonShiny
     window.playerParty[slotNum].isEvolved = false;
@@ -1110,6 +1149,68 @@ async function syncToParty(slotNum) {
     window.playerParty[slotNum].moves.move3 = attacks[2]
     window.playerParty[slotNum].moves.move4 = attacks[3]
 }
+async function switchTo(switchTarget, targetElement) {
+    if (window.playerParty[switchTarget].hp != 0 && window.playerParty[switchTarget].hp != undefined && (window.canAttack == true || window.canChange == true)) {
+        document.getElementById("playerPokemonImg").style.visibility = "visible"   
+        // Store party data in temp varibles
+        window.transferHP = window.playerParty[switchTarget].hp
+        window.transferMaxHp = window.playerParty[switchTarget].maxHp
+        window.transferLVL = window.playerParty[switchTarget].lvl
+        window.transferIsShiny = window.playerParty[switchTarget].isShiny
+        window.transferIsEvolved = window.playerParty[switchTarget].isEvolved
+        window.transferExp = window.playerParty[switchTarget].exp
+        window.transferID = window.playerParty[switchTarget].id
+        window.transferMove1 = window.playerParty[switchTarget].moves.move1
+        window.transferMove2 = window.playerParty[switchTarget].moves.move2
+        window.transferMove3 = window.playerParty[switchTarget].moves.move3
+        window.transferMove4 = window.playerParty[switchTarget].moves.move4
+
+        // Set party data to player current variables 
+        window.playerParty[switchTarget].hp = window.playerHP
+        window.playerParty[switchTarget].maxHp = window.playerMaxHp
+        window.playerParty[switchTarget].lvl = window.currentPokemonLvl
+        window.playerParty[switchTarget].isShiny = window.isPlayerPokemonShiny
+        window.playerParty[switchTarget].isEvolved = window.isPokemonEvolved
+        window.playerParty[switchTarget].exp = window.currentPokemonEXP
+        window.playerParty[switchTarget].id = window.playerID
+        window.playerParty[switchTarget].moves.move1 = window.attack1
+        window.playerParty[switchTarget].moves.move2 = window.attack2
+        window.playerParty[switchTarget].moves.move3 = window.attack3
+        window.playerParty[switchTarget].moves.move4 = window.attack4
+
+        // Set player value to current temp variables (stored party data)
+        window.playerHP = window.transferHP
+        window.playerMaxHp = window.transferMaxHp
+        window.currentPokemonLvl = window.transferLVL
+        window.isPlayerPokemonShiny = window.transferIsShiny
+        window.isEvolved = window.transferIsEvolved
+        window.currentPokemonEXP = window.transferIsShiny
+        window.playerID = window.transferID
+        window.attack1 = window.transferMove1
+        window.attack2 = window.transferMove2
+        window.attack3 = window.transferMove3
+        window.attack4 = window.transferMove4
+
+        //Update all visuals
+        document.getElementById("playerPokemonName").innerText = await getName(window.playerID)
+        document.getElementById("playerPokemonImg").setAttribute("src", await getPokemonBackImg(window.playerID, window.isPlayerPokemonShiny))
+        document.getElementById("playerPokemonLvl").innerText = window.currentPokemonLvl + " :Lvl"
+        document.getElementById("playerPokemonHP").innerText = window.playerHP + " :HP"
+        document.getElementById(targetElement + "Img").setAttribute("src", await getPokemonFrontImg(window.playerParty[switchTarget].id, window.isPokemonShiny))
+        document.getElementById(targetElement + "HP").innerText = window.playerParty[switchTarget].hp + "/" + window.playerParty[switchTarget].maxHp
+        document.getElementById("attack1").innerText = capitalizeFirstLetter(attack1.replace("-", " "))
+        document.getElementById("attack2").innerText = capitalizeFirstLetter(attack2.replace("-", " "))
+        document.getElementById("attack3").innerText = capitalizeFirstLetter(attack3.replace("-", " "))
+        document.getElementById("attack4").innerText = capitalizeFirstLetter(attack4.replace("-", " "))
+        moveSetArray = [window.attack1, window.attack2, window.attack3, window.attack4]
+        await setMoveColorOnSwap(moveSetArray)
+        console.log(window.playerParty[switchTarget]);
+        document.getElementById("log").innerHTML += " >  Come on back, " + await getName(window.playerParty[switchTarget].id) + " <br> \>  You're up, " + await getName(window.playerID) + "! <br>"
+        window.canAttack = false
+        setTimeout(doAttack, 1000, "player")
+    }
+}
 
 // Starts game loop
 pickStarters()
+// End of game
