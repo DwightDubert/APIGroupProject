@@ -12,6 +12,7 @@ font-family: 'Nunito', sans-serif; Bold, header kind of text
     margin: 0;
     padding: 0;
     font-family: 'Grape Nuts', cursive; 
+    user-select: none;
 }
 
 body {
@@ -32,7 +33,7 @@ body {
     left: 50%;
     transform: translate(-50%, 0);
     background-color: #00000044;
-    z-index: 1;
+    z-index: 10;
     
     visibility: visible;
 }
@@ -71,6 +72,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    visibility: hidden;
 }
 
 #partySlot1HP, #partySlot2HP, #partySlot3HP, #partySlot4HP, #partySlot5HP{
@@ -157,7 +160,8 @@ span {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    background-color: rgb(167, 255, 167);
+    background: rgb(1,120,1);
+    background: linear-gradient(200deg, rgba(1,120,1,1) 0%, rgba(44,155,44,1) 45%, rgba(142,235,142,1) 50%, rgba(167,255,167,1) 100%);
     width: 65vw;
     height: 80vh;
     left: 17.5vw;
@@ -191,6 +195,7 @@ span {
     transition-property: top;
     transition-duration: 0.1s;
     transition-timing-function: linear;
+    z-index: 1;
 }
 
 
@@ -199,6 +204,7 @@ span {
     display: flex;
     justify-content: end ;
     align-items: flex-start;
+    z-index: 1;
 }
 
 #playerHP{
@@ -282,18 +288,20 @@ span {
 #partySlot3Img,
 #partySlot4Img,
 #partySlot5Img { 
-   min-width:50%;
-   min-height:50%;
+   min-width: 40%;
+   min-height: 40%;
 
 }
-#partySlot1,
-#partySlot2,
-#partySlot3,
-#partySlot4,
-#partySlot5 { 
-   visibility: hidden;
-}
 
+#killCount {
+    position: absolute;
+    left: 50;
+    bottom: 50;
+    font-size: 50vh;
+    z-index: 0;
+    font-family: 'Bebas Neue';
+    color: #ff000022;
+}
 
 
 @media (max-width: 800px) {
