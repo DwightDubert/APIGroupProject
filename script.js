@@ -1080,7 +1080,7 @@ async function tryEvolve() {
 async function tryPokeball() {
     if (window.canAttack == true) {
         window.canAttack = false
-        document.getElementById("enemyPokemonImg").setAttribute("src", "pokeball.png")
+        document.getElementById("enemyPokemonImg").setAttribute("src", "images/pokeball.png")
         document.getElementById("log").innerHTML += "Trying to catch Pokemon..."
         scrollToBottom()
 
@@ -1113,7 +1113,7 @@ async function tryGreatball() {
     if (window.canAttack == true && window.greatBalls > 0) {
         window.canAttack = false;
         window.greatBalls--
-        document.getElementById("enemyPokemonImg").setAttribute("src", "greatball.png")
+        document.getElementById("enemyPokemonImg").setAttribute("src", "images/greatball.png")
         document.getElementById("bagButton4").innerHTML = "Greatballs: " + window.greatBalls
         document.getElementById("log").innerHTML += "Trying to catch Pokemon... "
         scrollToBottom()
