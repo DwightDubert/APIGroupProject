@@ -1,6 +1,14 @@
 // no brain
 // head empty
 //16.695
+
+// Known Bugs: 
+// Bugs marked with a * are possibly fixed and need to be tested
+
+// Evee, when evolving is fixed, will have a much higher chance of evolving into an evolution with less max hp than the other 2. 
+
+
+
 window.canAttack = false;
 window.potions = 10
 window.superPotions = 5
@@ -451,13 +459,13 @@ async function doAttack(target, attack) {
                     scrollToBottom()
                     document.getElementById("bagButton4").innerHTML = "Greatballs: " + window.greatBalls
                 } else if (dropRng > 1 && dropRng < 5) {
-                    numberDrops = Math.floor(Math.random() * 2) + 1
+                    numberDrops = Math.floor(Math.random()*2) +1
                     window.superPotions += numberDrops
                     document.getElementById("log").innerHTML += "* You Found " + numberDrops + " Super Potion(s)! <br>"
                     document.getElementById("bagButton3").innerHTML = "Super Potions: " + window.superPotions
                     scrollToBottom()
                 } else {
-                    numberDrops = Math.floor(Math.random() * 3) + 1
+                    numberDrops = Math.floor(Math.random() * 2) + 1
                     window.potions += Math.floor(Math.random() * 3) + 1
                     document.getElementById("log").innerHTML += "* You Found " + numberDrops + " Potion(s)! <br>"
                     document.getElementById("bagButton1").innerHTML = "Potion: " + window.potions
@@ -1049,14 +1057,18 @@ async function gainEXP() {
 
 async function tryEvolve() {
     id = window.playerID + 1
-    if (window.playerID == 133) {
-        id = window.eveList[Math.floor(Math.random() * 3)]
-    }
+    // if (window.playerID == 133) {
+    //     id = 135
+    // }
     let url = 'https://pokeapi.co/api/v2/pokemon/' + id;
     let pokemonData = await axios.get(url);
-    if (window.basePokemon.includes(id) == false && window.playerID != 133) {
+    if (window.basePokemon.includes(id) == false && id != 133) {
         // If next pokemon in pokedex != base pokemon, do things.
         if (await getPokemonHP(id) <= window.playerMaxHp) {
+            // if (id == 135){
+            //     id = window.eveList[Math.floor(Math.random()*2)+1]
+            //     console.log(id);
+            // }
             if (window.isPlayerPokemonShiny == true) {
                 document.getElementById("playerPokemonImg").setAttribute("src", pokemonData.data.sprites.back_shiny)
             } else {
@@ -1067,8 +1079,14 @@ async function tryEvolve() {
             document.getElementById("log").innerHTML += "================ <br> Your " + await getName(window.playerID) + " Evolved into a " + await getName(id) + "<br> ================ <br>"
             console.log("YOU EVOLVED");
             window.playerID = id
-            extraHP = window.playerHP - await getPokemonHP(id)
-            window.playerMaxHp = await getPokemonHP(id) + extraHP
+            if (window.playerHP < await getPokemonHP(id)) {
+                window.playerMaxHp = await getPokemonHP(id)
+            } else {
+                extraHP = window.playerHP - await getPokemonHP(id)
+                window.playerMaxHp = await getPokemonHP(id) + extraHP
+                console.log(extraHP);
+            }
+            console.log(playerMaxHp);
             window.playerHP = window.playerMaxHp
             getPokemonAttacks(window.playerID)
             document.getElementById("playerPokemonHP").innerText = window.playerHP + "/" + window.playerMaxHp + " :HP"
@@ -1181,7 +1199,7 @@ async function catchPokemon() {
         document.getElementById("partySlot5").style.visibility = "visible"
         document.getElementById("partySlot5HP").innerText = window.playerParty[4].hp + "/" + window.playerParty[4].hp
     } else {
-        document.getElementById("log").innerHTML += "You caught it! <br> Sadly, you dont gave room for " + await getName(window.enemyID) + " and they have been released into the wild. <br>"
+        document.getElementById("log").innerHTML += "You caught it! <br> Sadly, you dont have room for " + await getName(window.enemyID) + " and they have been released into the wild. <br>"
     }
     gainEXP()
 
