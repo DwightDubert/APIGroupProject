@@ -1,13 +1,18 @@
 // no brain
 // head empty
-//16.695
 
 // Known Bugs: 
-// Bugs marked with a * are possibly fixed and need to be tested
+// > Evee, when evolving is fixed, will have a much higher chance of evolving into an evolution with less max hp than the other 2. 
+// > API lags occasionally, causing the first enemy move of a fight to be a duplicate of your own move when spam-clicking an attack
+// > When a pokemon faints and is changed out, their sprite appears for a moment before the pokemon changes
 
-// Evee, when evolving is fixed, will have a much higher chance of evolving into an evolution with less max hp than the other 2. 
+// [[[Bugs marked with a * are possibly fixed and need to be tested]]]
 
 
+// Future Features Wish List:
+// Implementing Gen2
+// Party healing when out of battle
+// 
 
 window.canAttack = false;
 window.potions = 10
@@ -18,7 +23,7 @@ window.isPokemonShiny = undefined
 window.isPlayerPokemonShiny = false
 window.isPokemonEvolved = false;
 window.killCount = 0
-let potion = new Audio("jumpSound.wav")
+let potion = new Audio("jumpsound.wav")
 let pokeball = new Audio("pokeball.wav")
 let boop = new Audio("boop.wav")
 
@@ -221,10 +226,10 @@ async function getNewPokemonMoves(id) {
             attackArray.push(attack)
         }
     }
-    attack1temp = pokemonData.data.moves[attackArray[0]].move.name
-    attack2temp = pokemonData.data.moves[attackArray[1]].move.name
-    attack3temp = pokemonData.data.moves[attackArray[2]].move.name
-    attack4temp = pokemonData.data.moves[attackArray[3]].move.name
+    attack1temp = await pokemonData.data.moves[attackArray[0]].move.name
+    attack2temp = await pokemonData.data.moves[attackArray[1]].move.name
+    attack3temp = await pokemonData.data.moves[attackArray[2]].move.name
+    attack4temp = await pokemonData.data.moves[attackArray[3]].move.name
     newArray = [attack1temp, attack2temp, attack3temp, attack4temp]
     return newArray
 }
@@ -325,7 +330,7 @@ function scrollToBottom() {
     objDiv.scrollTop = objDiv.scrollHeight;
 }
 
-
+// Pulls up type advantages sheet
 function showTypeAdvantage() {
     if (window.show == false) {
         document.getElementById("typeAdvantagesImg").style.visibility = "visible"
@@ -344,6 +349,7 @@ async function makeEnemyPokemon() {
     const url = 'https://pokeapi.co/api/v2/pokemon/' + id;
     const pokemonData = await axios.get(url);
     let rng = (Math.floor(Math.random() * 50) + 1)
+    // Decides if shiny
     if (rng == 42) {
         window.isPokemonShiny = true;
         document.getElementById("enemyPokemonImg").setAttribute("src", pokemonData.data.sprites.front_shiny)
@@ -366,6 +372,8 @@ async function makeEnemyPokemon() {
     }, 200)
 }
 
+
+// Attack Loop - Heart and Soul of the whole project
 async function doAttack(target, attack) {
     if (attack == "attack1") {
         currentAttack = window.attack1
@@ -390,12 +398,13 @@ async function doAttack(target, attack) {
             dmg += Math.floor((Math.random() * 5) + 5)
         }
     }
+    // Checks if the player is attacking
     if (target == "enemy" && window.canAttack == true) {
         window.canAttack = false;
         boop.play()
         jiggle("player")
 
-        // Call that HUGE if statement 
+        // Call that HUGE if statement below - adds bonus dmg based on type of move vs type of pokemon
         bonus = await checkEffective(currentAttack, "enemy", 0)
         bonus += await checkEffective(currentAttack, "enemy", 1)
 
@@ -485,7 +494,7 @@ async function doAttack(target, attack) {
         }
     }
 
-    // If enemy attacks player
+    // Detects if enemy attacks player
     else if (target == "player") {
         let chance = Math.floor((Math.random() * 10) + 1)
         if (chance == 1) {
@@ -557,6 +566,7 @@ async function doAttack(target, attack) {
     }
 }
 
+// Handles all bonus damage
 async function checkEffective(currentAttack, target, index) {
     // Bonus Damage 
     bonus = 0
@@ -938,6 +948,7 @@ async function checkEffective(currentAttack, target, index) {
     return bonus
 }
 
+// Makes the pokemon / pokeball jiggle
 function jiggle(victim) {
     if (victim == "player") {
         document.getElementById("playerPokemon").style.justifyContent = "center"
@@ -952,7 +963,7 @@ function jiggle(victim) {
     }
 }
 
-
+// When a potion is used
 async function usePotion() {
     if (window.canAttack == true && window.potions > 0) {
         window.canAttack = false
@@ -980,6 +991,8 @@ async function usePotion() {
         setTimeout(doAttack, 1000, "player");
     }
 }
+
+// When a super potion is used
 async function useSuperPotion() {
     if (window.canAttack == true && window.superPotions > 0) {
         window.canAttack = false
@@ -1008,6 +1021,7 @@ async function useSuperPotion() {
     }
 }
 
+// Bag icon style controls
 function openBag() {
     document.getElementById("bagImg").style.visibility = "hidden"
     document.getElementById("closeBag").style.visibility = "visible"
@@ -1026,6 +1040,7 @@ function closeBag() {
     document.getElementById("bagButton4").style.visibility = "hidden"
 }
 
+// When pokemon is fainted or captured, exp is gained based on hp of enemy
 async function gainEXP() {
     exp = await getPokemonHP(window.enemyID)
     exp = exp * 66
@@ -1055,6 +1070,7 @@ async function gainEXP() {
     }
 }
 
+// Tries to evolve your pokemon when exp is gained
 async function tryEvolve() {
     id = window.playerID + 1
     // if (window.playerID == 133) {
@@ -1095,6 +1111,7 @@ async function tryEvolve() {
     }
 }
 
+// Tries to catch pokemon with normal pokeball
 async function tryPokeball() {
     if (window.canAttack == true) {
         window.canAttack = false
@@ -1127,6 +1144,7 @@ async function tryPokeball() {
         }, 7000)
     }
 }
+// Tries to catch pokemon using a greatball
 async function tryGreatball() {
     if (window.canAttack == true && window.greatBalls > 0) {
         window.canAttack = false;
@@ -1161,6 +1179,7 @@ async function tryGreatball() {
     }
 }
 
+// handles catching pokemon and putting it in the party
 async function catchPokemon() {
     pokeball.play()
     document.getElementById("enemyPokemonImg").style.visibility = "hidden"
@@ -1207,6 +1226,7 @@ async function catchPokemon() {
     setTimeout(makeEnemyPokemon, 1000)
     setTimeout(() => { window.canAttack = true; }, 1100)
 }
+// Handles transferring pokemon from on-field as en enemy to in-party as a friend
 async function syncToParty(slotNum) {
     attacks = []
     window.playerParty[slotNum].hp = await getPokemonHP(window.enemyID)
@@ -1218,12 +1238,14 @@ async function syncToParty(slotNum) {
     window.playerParty[slotNum].isEvolved = false;
     window.playerParty[slotNum].exp = 0;
     window.playerParty[slotNum].id = window.enemyID
-    attacks = await getNewPokemonMoves(window.playerParty[0].id)
+    attacks = await getNewPokemonMoves(window.enemyID)
+    console.log(attacks);
     window.playerParty[slotNum].moves.move1 = attacks[0]
     window.playerParty[slotNum].moves.move2 = attacks[1]
     window.playerParty[slotNum].moves.move3 = attacks[2]
     window.playerParty[slotNum].moves.move4 = attacks[3]
 }
+// Handles switching pokemon on the player's turn
 async function switchTo(switchTarget, targetElement) {
     if (window.playerParty[switchTarget].hp != 0 && window.playerParty[switchTarget].hp != undefined && (window.canAttack == true || window.canChange == true)) {
         window.canChange = false;

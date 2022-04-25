@@ -101,6 +101,7 @@ body {
 
 #bag {
     display: flex;
+    /* width: 17.5vw */
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
